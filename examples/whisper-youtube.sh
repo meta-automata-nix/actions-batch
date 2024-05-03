@@ -11,14 +11,17 @@ set -e -x -o pipefail
 
 ## Stage 1 - download the video
 
-# Rex Kruger: Should you get a Japanese pull saw?
-TARGET=https://www.youtube.com/watch?v=Q7bL61cSUpw
+TARGET=https://www.youtube.com/watch?v=igv9LRPzZbE
+
+# If running on cuda, set DEVICE="cuda"
+DEVICE="cpu"
 
 export DEBIAN_FRONTEND=noninteractive
 
 # Add ffmpeg to convert to mp4 later
-sudo -E apt-get update -qqqy && \
-  time sudo -E apt-get install -qqqy ffmpeg
+sudo -E apt update -qqqy && \
+  time sudo -E apt install -qqqy ffmpeg \
+      --no-install-recommends
 
 DL_URL=https://github.com/yt-dlp/yt-dlp/releases/download/2023.11.16/yt-dlp_linux
 
@@ -68,5 +71,5 @@ chmod +x ./download_models.py
 time ./download_models.py
 
 # Transcribe using the tiny model from the cache
-time whisper --language English ./audio/*.mp3 --model tiny > ./uploads/track.txt
+time whisper --device $DEVICE --language English ./audio/*.mp3 --model tiny > ./uploads/track.txt
 
