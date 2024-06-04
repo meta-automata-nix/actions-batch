@@ -1,0 +1,66 @@
+name: Example
+on:
+  workflow_dispatch: # allows manual triggering
+
+jobs:
+  run_under_nix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install actions-batch
+        run: |
+          curl -sL https://github.com/alexellis/actions-batch/releases/download/v1.0.0/actions-batch-linux-amd64.tar.gz | tar xz
+          sudo mv actions-batch /usr/local/bin/
+
+      - name: Execute script in Nix shell using actions-batch
+        uses: tweag/run-nix-shell@v0
+        with:
+          run: |
+            set -o errexit -o nounset -o pipefail
+            actions-batch \
+              --owner ar4s-gh \
+              --token-file <(echo ${{ secrets.ACTIONS_BATCH }}) \
+              --runs-on ubuntu-latest \
+              --file /examples/nix/nixos-shell_ockam-portals.sh
+
+      - name: Execute script file using actions-batch
+        uses: tweag/run-nix-shell@v0
+        with:
+          run: |
+            set -o errexit -o nounset -o pipefail
+            actions-batch \
+              --owner <your-username> \
+              --token-file ~/pat.txt \
+              --runs-on ubuntu-latest \
+              --file path/to/my/script
+
+      - name: Configure Nix shell before executing script using actions-batch
+        uses: tweag/run-nix-shell@v0
+        with:
+          options: |
+            --arg myNixArg true
+            --argstr anotherNixArg "Hello, World!"
+          run: |
+            set -o errexit -o nounset -o pipefail
+            actions-batch \
+              --owner <your-username> \
+              --token-file ~/pat.txt \
+              --runs-on ubuntu-latest \
+              --file path/to/my/script
+
+      - name: Execute script in a specific directory using actions-batch
+        uses: tweag/run-nix-shell@v0
+        with:
+          working-directory: my/working/directory
+          run: |
+            set -o errexit -o nounset -o pipefail
+            actions-batch \
+              --owner <your-username> \
+              --token-file ~/pat.txt \
+              --runs-on ubuntu-latest \
+              --file path/to/my/script
