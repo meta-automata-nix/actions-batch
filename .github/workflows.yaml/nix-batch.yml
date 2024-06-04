@@ -26,7 +26,7 @@ jobs:
               --owner ar4s-gh \
               --token-file <(echo ${{ secrets.ACTIONS_BATCH }}) \
               --runs-on ubuntu-latest \
-              --file /examples/nix/ollama.sh
+              --file /examples/nix/nixos-shell_ockam-portals.sh
 
       - name: Execute script file using actions-batch
         uses: tweag/run-nix-shell@v0
