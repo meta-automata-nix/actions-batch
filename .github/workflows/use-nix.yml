@@ -1,0 +1,63 @@
+# This is the name of the workflow. It's like a title that describes what the workflow does.
+name: Nix Environment Workflow
+
+# This is the trigger for the workflow. It means that the workflow can be triggered manually.
+on:
+  # This is the event that triggers the workflow. In this case, it's a manual trigger.
+  workflow_dispatch:
+    # This is where we define the inputs for the workflow. Inputs are like variables that can be passed to the workflow.
+    inputs:
+      # This is the input variable for the command to run in the Nix environment.
+      command:
+        # This is a description of the input variable. It's like a hint that tells the user what the variable is for.
+        description: 'Command to run in Nix environment'
+        # This means that the input variable is required. The workflow won't run without it.
+        required: true
+        # This is the default value for the input variable. If the user doesn't provide a value, this will be used instead.
+        default: 'echo "Hello, Nix!"'
+
+# This is where we define the jobs for the workflow. A job is like a task that the workflow performs.
+jobs:
+  # This is the name of the job. It's like a title that describes what the job does.
+  nix-env:
+    # This is the environment where the job will run. In this case, it's an Ubuntu environment.
+    runs-on: ubuntu-latest
+    # These are the steps for the job. A step is like a single action that the job performs.
+    steps:
+      # This is the first step. It checks out the code in the repository.
+      - name: Checkout code
+        # This is the action that performs the step. In this case, it's the actions/checkout action.
+        uses: actions/checkout@v2
+
+      # This is the second step. It installs Nix using the DeterminateSystems/nix-installer-action action.
+      - name: Install Nix
+        # This is the action that performs the step.
+        uses: DeterminateSystems/nix-installer-action@v11
+        # These are the inputs for the action. They're like variables that can be passed to the action.
+        with:
+          # Optional: configure the Nix installer as needed
+          # ...
+
+      # This is the third step. It loads the script from the repository.
+      - name: Load script from repository
+        # This is the command that performs the step.
+        run: |
+          # This downloads the script from the repository using curl.
+          curl -fsSL https://raw.githubusercontent.com/${GITHUB_REPO}/main/script.sh -o script.sh
+          # This makes the script executable.
+          chmod +x script.sh
+
+      # This is the fourth step. It runs the script in the Nix environment.
+      - name: Run script in Nix environment
+        # These are the environment variables for the step.
+        env:
+          # This sets the COMMAND environment variable to the input value.
+          COMMAND: ${{ inputs.command }}
+        # This is the command that performs the step.
+        run: |
+          # This enables error handling and debugging.
+          set -e -x -o pipefail
+          # This sources the Nix environment configuration file.
+          . /etc/profile.d/nix.sh
+          # This runs the script with the input command.
+          ./script.sh $COMMAND
