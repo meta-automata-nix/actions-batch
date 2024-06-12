@@ -6,6 +6,7 @@ rules:
   - "All new business logic should have corresponding unit tests."
   - "Refactor large functions to be more modular."
   - "Add docstrings to all functions and file headers."
+  - "Add and use fabric (https://github.com/danielmiessler/fabric) as a library for this repository"
 
 # This is the branch that Sweep will develop from and make pull requests to. Most people use 'main' or 'master' but some users also use 'dev' or 'staging'.
 branch: 'main'
