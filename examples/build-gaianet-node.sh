@@ -85,3 +85,6 @@ start_gaianet_node
 echo "GaiaNet node setup complete."
 echo "To stop the node, run the following command:"
 echo "$BASE_DIR/gaianet stop"
+
+# If you want to update the chat URL and context size during setup, you can run the script with the following options:
+# ./setup_gaianet.sh --update-config --chat-url "https://huggingface.co/second-state/Llama-2-13B-Chat-GGUF/resolve/main/Llama-2-13b-chat-hf-Q5_K_M.gguf" --chat-ctx-size 5120
