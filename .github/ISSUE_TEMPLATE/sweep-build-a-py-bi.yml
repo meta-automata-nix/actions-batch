@@ -7,9 +7,9 @@ body:
     id: description
     attributes:
       label: Details
-      description: [url.to/owner/project-repo-name.git] <- should be the only description
+      description: "[url.to/owner/project-repo-name.git] <- should be the only description"
       placeholder: |
-          Build-a-py-binary: Take a git repo URL that is python based and then
+          "Build-a-py-binary: Take a git repo URL that is python based and then
           Step 1: Create a new script /examples/build-a-py-binary/[project-name].sh based on the below.
           Step 2: Replace the environmental variables in the script based on the issue's description/url
           Step 3: (conditional) Retrieve the projects README.md to:
@@ -106,6 +106,7 @@ body:
 
           message "Build process completed successfully. Files are in the 'uploads' directory."
           ```
+          "
   - type: input
     id: branch
     attributes:
