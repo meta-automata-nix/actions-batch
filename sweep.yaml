@@ -8,6 +8,10 @@ rules:
   - "Add docstrings to all functions and file headers."
   - "Add and use fabric (https://github.com/danielmiessler/fabric) as a library for this repository"
   - "Commend all of your code like -> https://github.com/divnix/std" 
+  - "Use f-strings for string formatting in logger calls (e.g., logger.info(f'Hello {name}') instead of logger.info('Hello {name}', name=name))."
+  - "Ensure all functions have parameters and output annotated with type hints."
+  - "Remove any debug log or print statements in production code."
+  - "All new business logic should have corresponding unit tests in the same directory."
 
 # This is the branch that Sweep will develop from and make pull requests to. Most people use 'main' or 'master' but some users also use 'dev' or 'staging'.
 branch: 'main'
