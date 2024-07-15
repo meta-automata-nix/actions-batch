@@ -1,0 +1,116 @@
+name: Sweep Issue -- Build with Python
+title: 'Sweep: Build-a-py-binary'
+description: For small bugs, features, refactors, and tests to be handled by Sweep, an AI-powered junior developer.
+labels: sweep
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Details
+      description: "[url.to/owner/project-repo-name.git] <- should be the only description"
+      placeholder: |
+          "Build-a-py-binary: Take a git repo URL that is python based and then
+          Step 1: Create a new script /examples/build-a-py-binary/[project-name].sh based on the below.
+          Step 2: Replace the environmental variables in the script based on the issue's description/url
+          Step 3: (conditional) Retrieve the projects README.md to:
+                  a) add/modify/remove logic in the script
+                  b) scan the code repository and create a README.md that sets up the environment for pyinstaller.
+          Step 4: Build-a-py-binary! 
+          
+          ```
+          #!/bin/bash
+          
+          # Exit immediately if a command exits with a non-zero status,
+          # and ensure that any command in a pipeline failing causes the pipeline to fail.
+          # Print each command before executing it.
+          set -e -x -o pipefail
+          
+          # Variables
+          REPO_URL="https://url.to/owner/project-name.git"
+          REPO_DIR="project-name"
+          VENV_DIR="$REPO_DIR/venv"
+          UPLOADS_DIR="$REPO_DIR/uploads"
+          
+          # Function to display messages
+          function message() {
+              echo "==> $1"
+          }
+          
+          # Function to create aliases for python3 and pip3
+          function create_aliases() {
+              message "Creating aliases for python3 and pip3..."
+              alias python=python3
+              alias pip=pip3
+          }
+          
+          # Ensure we are using the correct Python version
+          message "Ensuring correct Python version..."
+          create_aliases
+          
+          # Clone the repository
+          message "Cloning the repository from $REPO_URL..."
+          git clone $REPO_URL
+          
+          # Navigate into the repository directory
+          cd $REPO_DIR
+          
+          # Set up a virtual environment
+          message "Setting up a virtual environment..."
+          python -m venv $VENV_DIR
+          
+          # Activate the virtual environment
+          message "Activating the virtual environment..."
+          source $VENV_DIR/bin/activate
+          
+          # Upgrade pip
+          message "Upgrading pip..."
+          pip install --upgrade pip
+          
+          # Install the required dependencies
+          message "Installing the required dependencies..."
+          pip install -r requirements.txt
+          
+          # Install PyInstaller
+          message "Installing PyInstaller..."
+          pip install pyinstaller
+          
+          # Build the binary using PyInstaller
+          # Assuming the main script of the project is named 'main.py'
+          MAIN_SCRIPT="main.py"
+          message "Building the binary using PyInstaller..."
+          pyinstaller --onefile $MAIN_SCRIPT
+          
+          # The output binary will be in the 'dist' directory
+          BINARY_PATH="dist/${MAIN_SCRIPT%.py}"
+          
+          # Calculate the SHA-256 hash of the binary
+          message "Calculating the SHA-256 hash of the binary..."
+          SHA256_HASH=$(shasum -a 256 $BINARY_PATH | awk '{print $1}')
+          
+          # Save the hash to a .txt file
+          HASH_FILE="${BINARY_PATH}.txt"
+          echo $SHA256_HASH > $HASH_FILE
+          
+          # Create uploads directory if it doesn't exist
+          message "Creating uploads directory..."
+          mkdir -p $UPLOADS_DIR
+          
+          # Move the binary and the hash file to the uploads directory
+          message "Moving the binary and the hash file to the uploads directory..."
+          mv $BINARY_PATH $UPLOADS_DIR/
+          mv $HASH_FILE $UPLOADS_DIR/
+          
+          # Deactivate the virtual environment
+          message "Deactivating the virtual environment..."
+          deactivate
+
+          message "Build process completed successfully. Files are in the 'uploads' directory."
+          ```
+          "
+  - type: input
+    id: branch
+    attributes:
+      label: Branch
+      description: The branch to work off of (optional)
+      placeholder: |
+        main
