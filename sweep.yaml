@@ -3,6 +3,7 @@
 
 # This setting contains a list of rules that Sweep will check for. If any of these rules are broken in a new commit, Sweep will create an pull request to fix the broken rule.
 rules:
+  - "Each example script in /examples should have a corresponding manual GitHub action created in .github/workflows/example-sh.yml"
   - "All new business logic should have corresponding unit tests."
   - "Refactor large functions to be more modular."
   - "Add docstrings to all functions and file headers."
@@ -20,7 +21,7 @@ gha_enabled: True
 # Example:
 #
 # description: sweepai/sweep is a python project. The main api endpoints are in sweepai/api.py. Write code that adheres to PEP8.
-description: ''
+description: 'This project is an "agentic fork" of https://github.com/alexellis/actions-batch with manual github actions that run the scripts found in /examples. It can be used to create new scripts [sweep ai](https://sweep.dev) via Github Issue's'
 
 # This sets whether to create pull requests as drafts. If this is set to True, then all pull requests will be created as drafts and GitHub Actions will not be triggered.
 draft: False
