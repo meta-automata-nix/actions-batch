@@ -1,23 +1,21 @@
-name: build
+# This is the name of the workflow. It's like a title that describes what the workflow does.
+name: Nix Environment Workflow
 
+# This is the trigger for the workflow. It means that the workflow can be triggered manually.
 on:
-  push:
-    branches:
-    - '*'
-  pull_request:
-    branches:
-    - '*'
-
+  # This is the event that triggers the workflow. In this case, it's a manual trigger.
+  workflow_dispatch:
+    # This is where we define the inputs for the workflow. Inputs are like variables that can be passed to the workflow.
+    inputs:
+      # This is the input variable for the command to run in the Nix environment.
+      #!/bin/bash
 jobs:
-  build:
+  publishGitRelease:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-        with:
-          fetch-depth: 1
-      - name: Install Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: 1.20.x
-      - name: Make all
-        run: make all
+      - uses: actions/checkout@v4
+      - name: Run a Nix Example
+        run: |
+          set -e -x -o pipefail
+          chmod +x ./examples/nix/nix2crate2bin.sh
+          ./examples/nix/nix2crate2bin.sh
